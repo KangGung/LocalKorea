@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { Search as SearchIcon, SlidersHorizontal, Home, Heart, User } from 'lucide-react'
+import { Search as SearchIcon, SlidersHorizontal, Home as HomeIcon, Heart, User } from 'lucide-react'
+
 
 const featured = {
   title: 'Gyeongbokgung Palace Tour',
@@ -110,7 +111,7 @@ export default function Home() {
       <nav className="fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur border-t border-neutral-200">
         <div className="mx-auto max-w-md px-6 py-3 grid grid-cols-4 gap-2 text-xs">
           <button className="flex flex-col items-center gap-1 text-neutral-900 font-semibold">
-            <Home className="h-6 w-6" />
+            <HomeIcon className="h-6 w-6" />
             Home
           </button>
           <button className="flex flex-col items-center gap-1 text-neutral-500 hover:text-neutral-900">
