@@ -24,3 +24,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 - `/` — Home feed
 - `/host/dashboard` — Host dashboard
 - `/host/new` — New event form
+
+## Documentation
+- [Local Korea v1.0 Product Build Specification](docs/LOCAL_KOREA_PRODUCT_SPEC.md)
