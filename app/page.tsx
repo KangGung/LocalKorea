@@ -1,29 +1,26 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Search as SearchIcon, SlidersHorizontal, Home as HomeIcon, Heart, User } from 'lucide-react'
 
-
-const featured = {
-  title: 'Gyeongbokgung Palace Tour',
-  subtitle: 'Seoul · English/Korean',
-  image: 'https://images.unsplash.com/photo-1514388619276-6ae38d1f7a4e?q=80&w=1600&auto=format&fit=crop',
-}
-
-const trending = [
-  { title: 'Seoul Skyline Night Cruise', image: 'https://images.unsplash.com/photo-1583397593091-5f83e3874c2f?q=80&w=1200&auto=format&fit=crop' },
-  { title: 'Kimchi Making Class', image: 'https://images.unsplash.com/photo-1604908554055-0c3b7b4bd86d?q=80&w=1200&auto=format&fit=crop' },
-  { title: 'Hiking in Bukhansan', image: 'https://images.unsplash.com/photo-1595147389795-37094173bfd2?q=80&w=1200&auto=format&fit=crop' },
-  { title: 'Han River Picnic', image: 'https://images.unsplash.com/photo-1608354584374-2f7d8a6aa8f5?q=80&w=1200&auto=format&fit=crop' },
-]
-
-const upcoming = [
-  { title: 'Traditional Tea Ceremony', date: 'Apr 25', price: 15000, image: 'https://images.unsplash.com/photo-1523908957990-36f52d52c3b8?q=80&w=800&auto=format&fit=crop' },
-  { title: 'Busan Food Tasting', date: 'Apr 27', price: 30000, image: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop' },
-  { title: 'Han River Bike Ride', date: 'Apr 29', price: 10000, image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=800&auto=format&fit=crop' },
-]
+import {
+  FEATURED_EVENT_SLUG,
+  TRENDING_EVENT_SLUGS,
+  UPCOMING_EVENT_SLUGS,
+  eventsBySlug,
+  getEventsForSlugs,
+} from '../lib/events'
 
 export default function Home() {
+  const featured = eventsBySlug[FEATURED_EVENT_SLUG]
+  const trending = getEventsForSlugs(TRENDING_EVENT_SLUGS)
+  const upcoming = getEventsForSlugs(UPCOMING_EVENT_SLUGS)
+
+  if (!featured) {
+    throw new Error('Featured event not found')
+  }
+
   return (
     <div className="min-h-screen bg-white text-neutral-900">
       {/* Top bar */}
@@ -54,15 +51,25 @@ export default function Home() {
       <main className="mx-auto max-w-md px-4 pb-28 space-y-8">
         {/* Featured hero */}
         <section aria-label="Featured Event">
-          <div className="relative h-56 rounded-3xl overflow-hidden shadow-md">
-            <Image src={featured.image} alt={featured.title} fill priority sizes="(max-width: 768px) 100vw, 600px" className="object-cover" />
+          <Link
+            href={`/events/${featured.slug}`}
+            className="relative block h-56 rounded-3xl overflow-hidden shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          >
+            <Image
+              src={featured.image}
+              alt={featured.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 600px"
+              className="object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
             <div className="absolute bottom-0 p-4 text-white">
               <p className="text-xs font-semibold tracking-wide uppercase opacity-90">Featured Event</p>
               <h2 className="text-2xl font-extrabold leading-tight drop-shadow-sm">{featured.title}</h2>
               <p className="text-sm opacity-90">{featured.subtitle}</p>
             </div>
-          </div>
+          </Link>
         </section>
 
         {/* Trending carousel */}
@@ -73,14 +80,24 @@ export default function Home() {
           </div>
           <div className="-mx-4 px-4 overflow-x-auto">
             <div className="flex gap-3 w-max">
-              {trending.map((item, i) => (
-                <button key={i} className="relative h-40 w-40 rounded-3xl overflow-hidden shadow-sm active:scale-95">
-                  <Image src={item.image} alt={item.title} width={160} height={160} className="h-full w-full object-cover" />
+              {trending.map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/events/${event.slug}`}
+                  className="relative h-40 w-40 rounded-3xl overflow-hidden shadow-sm active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+                >
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    width={160}
+                    height={160}
+                    className="h-full w-full object-cover"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <span className="absolute bottom-2 left-2 right-2 text-white text-sm font-semibold leading-snug drop-shadow">
-                    {item.title}
+                    {event.title}
                   </span>
-                </button>
+                </Link>
               ))}
             </div>
           </div>
@@ -90,17 +107,31 @@ export default function Home() {
         <section aria-label="Upcoming Events" className="space-y-3">
           <h3 className="text-lg font-bold">Upcoming Events</h3>
           <ul className="space-y-3">
-            {upcoming.map((ev, i) => (
-              <li key={i} className="flex items-center gap-3 bg-neutral-50 rounded-2xl p-2 hover:bg-neutral-100 transition active:scale-[0.99]">
-                <Image src={ev.image} alt={ev.title} width={56} height={56} className="h-14 w-14 rounded-xl object-cover" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold truncate">{ev.title}</p>
-                  <p className="text-xs text-neutral-500">{ev.date}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-neutral-500">Price</p>
-                  <p className="text-sm font-semibold">₩{ev.price.toLocaleString()}</p>
-                </div>
+            {upcoming.map((event) => (
+              <li key={event.slug}>
+                <Link
+                  href={`/events/${event.slug}`}
+                  className="flex items-center gap-3 bg-neutral-50 rounded-2xl p-2 hover:bg-neutral-100 transition active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+                >
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    width={56}
+                    height={56}
+                    className="h-14 w-14 rounded-xl object-cover"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate">{event.title}</p>
+                    <p className="text-xs text-neutral-500">{event.shortDate}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-neutral-500">Price</p>
+                    <p className="text-sm font-semibold">
+                      {event.currency}
+                      {event.price.toLocaleString()}
+                    </p>
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
