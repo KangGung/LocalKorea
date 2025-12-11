@@ -6,3 +6,12 @@ html, body {
   height: 100%;
   background: #fff;
 }
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
