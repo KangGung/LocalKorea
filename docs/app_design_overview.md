@@ -5,6 +5,11 @@
 - **Type:** Mobile-first PWA marketplace connecting travelers with curated local experiences in Korea.
 - **Purpose:** Help visitors quickly discover, book, and manage authentic tours/events while enabling local hosts to publish and track offerings.
 
+### Success Metrics (north stars)
+- Guest: first booking conversion rate, checkout completion time, save-to-book ratio.
+- Host: time to publish a new listing, draft → published completion rate, repeat-host rate.
+- Reliability: PWA install success rate, Core Web Vitals (LCP <2.5s, CLS <0.1), crash-free sessions.
+
 ### Core Features (5–7)
 1. Curated home feed with filters (location, date, category, budget).
 2. Rich experience detail pages with media galleries, accessibility notes, and host credibility signals.
@@ -20,6 +25,17 @@
 3. Review schedule, accessibility details, and host profile → choose date/time.
 4. Proceed to checkout → confirm attendees and payment details.
 5. Receive confirmation → view booking in trips page (future) → access directions and support.
+
+### User Flow (Host)
+1. Open dashboard → view KPIs and alerts.
+2. Start “New Experience” → complete required steps with validation hints.
+3. Upload media and set pricing/availability → preview listing.
+4. Publish → monitor bookings and respond to reviews from dashboard tables.
+
+### Information Architecture
+- **Global navigation:** Home, Search (future), Saved, Profile; host tools accessible from profile/role switcher.
+- **Primary entities:** Experiences, Hosts, Bookings, Reviews, Media assets.
+- **Cross-links:** Related experiences on detail pages; dashboard links to edit specific listings; confirmations link to itinerary.
 
 ### Page Structure
 - **Home Feed (/):** Surfacing featured and filtered experiences with quick actions to view details or save.
@@ -106,3 +122,9 @@ For each page: purpose, layout structure, components, interactions, navigation, 
 - Forms: client-side validation with clear error messaging and required markers; support inline help.
 - Code quality: modular file structure, TypeScript types, linting/formatting, maintainable and well-documented components.
 
+### Component & Data Guidance
+- **Availability calendar:** client-side cache keyed by experience ID + month; highlight sold-out dates with tooltip.
+- **Experience card:** props for title, price, rating count, badges, and bookmark state; skeleton variant for loading.
+- **Booking summary module:** reusable in checkout and confirmation; accepts promo deductions and fees; exposes subtotal helper.
+- **Host dashboard tables:** paginated with status pills and sort controls; empty state CTA links to creation flow.
+- **Performance:** lazy-load media carousels, use Next.js image optimization, and prefetch nearby routes on hover/touchstart.
